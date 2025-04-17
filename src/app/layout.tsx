@@ -11,7 +11,7 @@ import '../utils/i18n';
 
 export const metadata = {
   title: "Taller Prime Autos",
-  description: "Página principal de Taller de Coches - Prime Autos profesional que ofrece servicios de reparación, mantenimiento e instalación de accesorios para tu vehículo.",
+  description: "Prime Autos profesional que ofrece servicios de reparación, mantenimiento e instalación de accesorios para tu vehículo.",
   openGraph: {
     title: "Prime Autos - Taller de Coches",
     description:
