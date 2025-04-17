@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic"; // Carga dinámica
 import axios from "axios";
 import "react-calendar/dist/Calendar.css"; // Estilos de react-calendar
