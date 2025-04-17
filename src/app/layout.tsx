@@ -61,7 +61,6 @@ export default function RootLayout({
         </head>
         <body className={roboto.className}>
           <Navbar />
-          <LanguageSwitcher />
           {children}
           <ChatbotWidget />
           <Footer />
