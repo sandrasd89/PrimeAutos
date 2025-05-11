@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import AdminTranslationsPanel from "./AdminTranslationPanel";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslations } from "@/hooks/useTranslations";
+import { useRouter } from "next/navigation";
 
 
 interface Appointment {
@@ -44,6 +45,8 @@ interface Testimonial {
 
 export default function AdminPage() {
 
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -57,6 +60,7 @@ export default function AdminPage() {
   const [debouncedSearchTerm] = useDebounce(searchTerm, 300); // Retrasa 300ms
   const { locale } = useLanguage();
   const t = useTranslations();
+  const router = useRouter();
 
   // Definición de las opciones para el select de tipo de vehículo:
 const vehicleTypeOptions = [
@@ -95,8 +99,42 @@ const vehicleTypeOptions = [
 
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
 
+  // Función de logout: realiza la llamada al endpoint, limpia el token y redirige
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post("/api/logout"); // Llama al endpoint de logout
+      if (response.status === 200) {
+        localStorage.removeItem("token"); // Limpia el token si se guardó en localStorage
+        router.push("/admin/loginAdmin"); // Redirige a la página de login
+      } else {
+        console.error("Error al cerrar la sesión");
+      }
+    } catch (error) {
+      console.error("Error al cerrar la sesión:", error);
+    }
+  };
+
   
   useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    //setIsAuthenticated(!!token);
+    /*useEffect(() => {
+    // Se verifica el token en localStorage (u otra lógica de autenticación)
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // Redirige al login si no hay token
+      router.push("/admin/loginAdmin");
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [router]);
+
+  if (isAuthenticated === null) {
+    return <div>Cargando...</div>;
+  }*/
+
     // Cargar citas y servicios al inicio
     const fetchAppointments = async () => {
       try {
@@ -367,6 +405,9 @@ const vehicleTypeOptions = [
     setTestimonialForm(testimonial);
   };
 
+ 
+
+
   return (
     <div className="flex max-7xl mx-auto bg-white transition-all ">
       {/* Panel Lateral (Aside) */}
@@ -420,6 +461,14 @@ const vehicleTypeOptions = [
                     : "bg-yellow-500 text-gray-800 hover:bg-gray-700 hover:text-gray-900"
                 }`}
               />
+          </li>
+          <li>
+            <Button
+              buttonLabel="Cerrar Sesión"
+              onButtonClick={handleLogout}
+              buttonType="light"
+              className="w-full text-left px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+            />
           </li>
         </ul>
       </aside>

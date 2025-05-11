@@ -4,7 +4,7 @@ export const getAccessToken = async () => {
     if (!token) {
       try {
         // Intentar refrescar el token si no existe en localStorage
-        const response = await fetch("/api/refreshToken", { method: "GET", credentials: "include" });
+        const response = await fetch("/api/refreshToken", { method: "POST", credentials: "include" });
         const data = await response.json();
   
         if (data.success && data.accessToken) {
