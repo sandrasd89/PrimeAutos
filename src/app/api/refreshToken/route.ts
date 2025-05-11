@@ -2,7 +2,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-const secret = process.env.JWT_SECRET || "clave_secreta";
+
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET no está definido en el entorno");
+}
+const secret = process.env.JWT_SECRET;
+
 
 export const POST = async (req: NextRequest) => {
   try {
